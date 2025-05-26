@@ -26,4 +26,4 @@ module-name = "server"
 module-root = ""
 
 [project.scripts]
-claude-code-proxy = "server:main"
+claude-code-proxy = "server.main:main"

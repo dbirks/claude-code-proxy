@@ -1,6 +1,6 @@
 import uvicorn
 
-from .app import app
+from .fastapi import app
 
 
 def main():

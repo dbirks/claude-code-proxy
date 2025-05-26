@@ -25,8 +25,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Configure uvicorn to be quieter
-import uvicorn
 # Tell uvicorn's loggers to be quiet
 logging.getLogger("uvicorn").setLevel(logging.WARNING)
 logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
