@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.1.3](https://github.com/dbirks/claude-code-proxy/compare/v0.1.2...v0.1.3) (2025-05-26)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#10](https://github.com/dbirks/claude-code-proxy/issues/10)) ([58305a0](https://github.com/dbirks/claude-code-proxy/commit/58305a0fd7c8a07948ff7cf8c0bb7dc35c507b95))
+
+
+### Documentation
+
+* Start reworking the readme after making this a published package ([fe982a0](https://github.com/dbirks/claude-code-proxy/commit/fe982a00c8daba2d775e9a42c3be6b1e96ea64a1))
+
+
+### Miscellaneous Chores
+
+* Install ruff, run `uvx ruff format` ([9407734](https://github.com/dbirks/claude-code-proxy/commit/94077346f57e94dba6f516b202f23c1f0125ac24))
+* Run `uvx check --fix` ([3521130](https://github.com/dbirks/claude-code-proxy/commit/3521130f195507c7f3fb08fddeaec2966f177b12))
+
+
+### Continuous Integration
+
+* Add workflow to build ([31c53cb](https://github.com/dbirks/claude-code-proxy/commit/31c53cb1f42529362c5fc8baa1557849eabcc9f1))
+
 ## [0.1.2](https://github.com/dbirks/claude-code-proxy/compare/v0.1.1...v0.1.2) (2025-05-26)
 
 
