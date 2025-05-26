@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.4](https://github.com/dbirks/claude-code-proxy/compare/v0.1.3...v0.1.4) (2025-05-26)
+
+
+### Bug Fixes
+
+* default and forward `thinking` only for Anthropic models ([40ae4a4](https://github.com/dbirks/claude-code-proxy/commit/40ae4a4ca7c74038a44c417f1a5ae7419ae45561))
+
+
+### Documentation
+
+* Start a `CLAUDE.md` file for this repo ([da73ed8](https://github.com/dbirks/claude-code-proxy/commit/da73ed828c89d85666a6a28ee03a76c571dd7682))
+
+
+### Tests
+
+* Add an initial e2e Github Action workflow ([6c6d088](https://github.com/dbirks/claude-code-proxy/commit/6c6d088b14c2f1744c2f891c0c819b2a8018ad28))
+
 ## [0.1.3](https://github.com/dbirks/claude-code-proxy/compare/v0.1.2...v0.1.3) (2025-05-26)
 
 
