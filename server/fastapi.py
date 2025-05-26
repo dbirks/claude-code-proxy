@@ -569,60 +569,31 @@ def convert_anthropic_to_litellm(anthropic_request: MessagesRequest) -> Dict[str
     if anthropic_request.top_k:
         litellm_request["top_k"] = anthropic_request.top_k
 
-    # Convert tools to OpenAI format
+    # Convert tools to OpenAI-compatible format
     if anthropic_request.tools:
         openai_tools = []
         is_gemini_model = anthropic_request.model.startswith("gemini/")
-
         for tool in anthropic_request.tools:
-            # Convert to dict if it's a pydantic model
             if hasattr(tool, "dict"):
                 tool_dict = tool.dict()
             else:
-                # Ensure tool_dict is a dictionary, handle potential errors if 'tool' isn't dict-like
                 try:
                     tool_dict = dict(tool) if not isinstance(tool, dict) else tool
                 except (TypeError, ValueError):
                     logger.error(f"Could not convert tool to dict: {tool}")
-                    continue  # Skip this tool if conversion fails
-
-            # Clean the schema if targeting a Gemini model
+                    continue
             input_schema = tool_dict.get("input_schema", {})
             if is_gemini_model:
-                logger.debug(f"Cleaning schema for Gemini tool: {tool_dict.get('name')}")
                 input_schema = clean_gemini_schema(input_schema)
-
-            # Create OpenAI-compatible function tool
-            openai_tool = {
+            openai_tools.append({
                 "type": "function",
                 "function": {
                     "name": tool_dict["name"],
                     "description": tool_dict.get("description", ""),
-                    "parameters": input_schema,  # Use potentially cleaned schema
-                },
-            }
-            openai_tools.append(openai_tool)
-
+                    "parameters": input_schema,
+                }
+            })
         litellm_request["tools"] = openai_tools
-
-    # Convert tool_choice to OpenAI format if present
-    if anthropic_request.tool_choice:
-        if hasattr(anthropic_request.tool_choice, "dict"):
-            tool_choice_dict = anthropic_request.tool_choice.dict()
-        else:
-            tool_choice_dict = anthropic_request.tool_choice
-
-        # Handle Anthropic's tool_choice format
-        choice_type = tool_choice_dict.get("type")
-        if choice_type == "auto":
-            litellm_request["tool_choice"] = "auto"
-        elif choice_type == "any":
-            litellm_request["tool_choice"] = "any"
-        elif choice_type == "tool" and "name" in tool_choice_dict:
-            litellm_request["tool_choice"] = {"type": "function", "function": {"name": tool_choice_dict["name"]}}
-        else:
-            # Default to auto if we can't determine
-            litellm_request["tool_choice"] = "auto"
 
     return litellm_request
 
@@ -1330,7 +1301,12 @@ async def create_message(request: MessagesRequest, raw_request: Request):
         # Check for LiteLLM-specific attributes
         for attr in ["message", "status_code", "response", "llm_provider", "model"]:
             if hasattr(e, attr):
-                error_details[attr] = getattr(e, attr)
+                val = getattr(e, attr)
+                # Ensure JSON serializable: primitives/dicts/lists stay, others stringify
+                if isinstance(val, (str, int, float, bool, dict, list)):
+                    error_details[attr] = val
+                else:
+                    error_details[attr] = str(val)
 
         # Check for additional exception details in dictionaries
         if hasattr(e, "__dict__"):
