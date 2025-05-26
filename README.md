@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  Forked from: [`1rgs/claude-code-proxy`](https://github.com/1rgs/claude-code-proxy)
+  Forked from: <a href="https://github.com/1rgs/claude-code-proxy">1rgs/claude-code-proxy</a>
 </p>
 
 
