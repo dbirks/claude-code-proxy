@@ -175,7 +175,7 @@ class Tool(BaseModel):
 
 
 class ThinkingConfig(BaseModel):
-    enabled: bool
+    enabled: bool = True
 
 
 class MessagesRequest(BaseModel):
@@ -557,12 +557,16 @@ def convert_anthropic_to_litellm(anthropic_request: MessagesRequest) -> Dict[str
 
     # Create LiteLLM request dict
     litellm_request = {
-        "model": anthropic_request.model,  # t understands "anthropic/claude-x" format
+        "model": anthropic_request.model,  # it understands "anthropic/claude-x" format
         "messages": messages,
         "max_tokens": max_tokens,
         "temperature": anthropic_request.temperature,
         "stream": anthropic_request.stream,
     }
+
+    # Only include thinking field for Anthropic models
+    if anthropic_request.thinking and anthropic_request.model.startswith("anthropic/"):
+        litellm_request["thinking"] = anthropic_request.thinking
 
     # Add optional parameters if present
     if anthropic_request.stop_sequences:
