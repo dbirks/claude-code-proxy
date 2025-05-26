@@ -1,15 +1,12 @@
-# claude-code-proxy
+<h1 align="center">claude-code-proxy</h1>
+
+<p align="center">
+  Connect Claude Code to alternative models from OpenAI or Gemini.
+</p>
 
 Forked from [1rgs/claude-code-proxy](https://github.com/1rgs/claude-code-proxy)
 
-# Anthropic API Proxy for Gemini & OpenAI Models 🔄
-
-**Use Anthropic clients (like Claude Code) with Gemini or OpenAI backends.** 🤝
-
-A proxy server that lets you use Anthropic clients with Gemini or OpenAI models via LiteLLM. 🌉
-
-
-![Anthropic API Proxy](pic.png)
+![Claude Code Proxy](pic.png)
 
 ## Quick Start ⚡
 
