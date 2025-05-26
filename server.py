@@ -1455,7 +1455,8 @@ def log_request_beautifully(method, path, claude_model, openai_model, num_messag
     print(model_line)
     sys.stdout.flush()
 
-if __name__ == "__main__":
+def main():
+    """Entry point for the application script"""
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == "--help":
         print("Run with: uvicorn server:app --reload --host 0.0.0.0 --port 8082")
@@ -1463,3 +1464,6 @@ if __name__ == "__main__":
     
     # Configure uvicorn to run with minimal logs
     uvicorn.run(app, host="0.0.0.0", port=8082, log_level="error")
+
+if __name__ == "__main__":
+    main()

@@ -12,3 +12,10 @@ dependencies = [
     "litellm==1.63.11",
     "python-dotenv==1.0.1",
 ]
+
+# [build-system]
+# requires = ["uv_build>=0.7.3,<0.8"]
+# build-backend = "uv_build"
+
+[project.scripts]
+claude-code-proxy = "server:main"
