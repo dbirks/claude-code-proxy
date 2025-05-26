@@ -13,15 +13,15 @@ Usage:
   python tests.py --tools            # Run tool-related tests only
 """
 
-import os
-import json
-import time
-import httpx
 import argparse
 import asyncio
+import json
+import os
 import sys
+import time
 from datetime import datetime
-from typing import Dict, Any, List, Optional, Set
+
+import httpx
 from dotenv import load_dotenv
 
 # Load environment variables

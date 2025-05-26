@@ -1,19 +1,16 @@
-from fastapi import FastAPI, Request, HTTPException
-import uvicorn
-import logging
 import json
-from pydantic import BaseModel, Field, field_validator
-from typing import List, Dict, Any, Optional, Union, Literal
-import httpx
+import logging
 import os
-from fastapi.responses import JSONResponse, StreamingResponse
-import litellm
-import uuid
-import time
-from dotenv import load_dotenv
-import re
-from datetime import datetime
 import sys
+import time
+import uuid
+from typing import Any, Dict, List, Literal, Optional, Union
+
+import litellm
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, field_validator
 
 # Load environment variables from .env file
 load_dotenv()
@@ -1146,7 +1143,7 @@ async def create_message(request: MessagesRequest, raw_request: Request):
                             break
 
                     if is_only_tool_result and len(msg["content"]) > 0:
-                        logger.warning(f"Found message with only tool_result content - special handling required")
+                        logger.warning("Found message with only tool_result content - special handling required")
                         # Extract the content from all tool_result blocks
                         all_text = ""
                         for block in msg["content"]:
