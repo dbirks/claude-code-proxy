@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/dbirks/claude-code-proxy/compare/v0.1.0...v0.1.1) (2025-05-26)
+
+
+### Bug Fixes
+
+* **ci:** Fix the name of the uv action ([01cf1ca](https://github.com/dbirks/claude-code-proxy/commit/01cf1cadbd56777f10f8dbaeed479fd4089de2ac))
+
 ## [0.1.0](https://github.com/dbirks/claude-code-proxy/compare/v0.0.1...v0.1.0) (2025-05-26)
 
 
