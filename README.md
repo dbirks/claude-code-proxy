@@ -4,31 +4,47 @@
   Connect Claude Code to alternative models from OpenAI or Gemini.
 </p>
 
-Forked from [1rgs/claude-code-proxy](https://github.com/1rgs/claude-code-proxy)
+<p align="center">
+  Forked from: [`1rgs/claude-code-proxy`](https://github.com/1rgs/claude-code-proxy)
+</p>
+
 
 ![Claude Code Proxy](pic.png)
 
-## Quick Start ⚡
+- [Quick start](#quick-start)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Using with Claude Code 🎮](#using-with-claude-code-)
+- [Model Mapping 🗺️](#model-mapping-️)
+  - [Supported Models](#supported-models)
+    - [OpenAI Models](#openai-models)
+    - [Gemini Models](#gemini-models)
+  - [Model Prefix Handling](#model-prefix-handling)
+  - [Customizing Model Mapping](#customizing-model-mapping)
+- [How It Works 🧩](#how-it-works-)
+- [Contributing 🤝](#contributing-)
+
+## Quick start
+
+```
+uvx claude-code-proxy
+```
+
+## Installation
 
 ### Prerequisites
 
-- OpenAI API key 🔑
-- Google AI Studio (Gemini) API key (if using Google provider) 🔑
-- [uv](https://github.com/astral-sh/uv) installed.
+- Set `OPENAI_API_KEY` or `GEMINI_API_KEY` in your environment.
+- Install `uv`:
+  - Install docs here: https://docs.astral.sh/uv/getting-started/installation
+  - On MacOS: `brew install uv`
+  - On Windows: `winget install astral-sh.uv`
 
-### Setup 🛠️
+### Configuration
 
-1. **Clone this repository**:
-   ```bash
-   git clone https://github.com/1rgs/claude-code-openai.git
-   cd claude-code-openai
-   ```
-
-2. **Install uv** (if you haven't already):
-   ```bash
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-   ```
-   *(`uv` will handle dependencies based on `pyproject.toml` when you run the server)*
+> [!WARNING]  
+> Readme rewrite is in progress on everything below
 
 3. **Configure Environment Variables**:
    Copy the example environment file:
@@ -72,10 +88,10 @@ Forked from [1rgs/claude-code-proxy](https://github.com/1rgs/claude-code-proxy)
 
 The proxy automatically maps Claude models to either OpenAI or Gemini models based on the configured model:
 
-| Claude Model | Default Mapping | When BIG_MODEL/SMALL_MODEL is a Gemini model |
-|--------------|--------------|---------------------------|
-| haiku | openai/gpt-4o-mini | gemini/[model-name] |
-| sonnet | openai/gpt-4o | gemini/[model-name] |
+| Claude Model | Default Mapping    | When BIG_MODEL/SMALL_MODEL is a Gemini model |
+| ------------ | ------------------ | -------------------------------------------- |
+| haiku        | openai/gpt-4o-mini | gemini/[model-name]                          |
+| sonnet       | openai/gpt-4o      | gemini/[model-name]                          |
 
 ### Supported Models
 
