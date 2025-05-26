@@ -13,9 +13,17 @@ dependencies = [
     "python-dotenv==1.0.1",
 ]
 
+[build-system]
+requires = ["uv_build>=0.7.8,<0.8"]
+build-backend = "uv_build"
+
 # [build-system]
-# requires = ["uv_build>=0.7.3,<0.8"]
-# build-backend = "uv_build"
+# requires    = ["hatchling"]
+# build-backend = "hatchling.build"
+
+[tool.uv.build-backend]
+module-name = "server"
+module-root = ""
 
 [project.scripts]
 claude-code-proxy = "server:main"
