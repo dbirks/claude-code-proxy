@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/dbirks/claude-code-proxy/compare/v0.1.1...v0.1.2) (2025-05-26)
+
+
+### Miscellaneous Chores
+
+* **deps:** update astral-sh/setup-uv action to v6 ([#11](https://github.com/dbirks/claude-code-proxy/issues/11)) ([ebc33bf](https://github.com/dbirks/claude-code-proxy/commit/ebc33bfb2d47a6042d4654ca6b93498b244abd78))
+
+
+### Continuous Integration
+
+* Add the `id-token` permission to be able to use OIDC with PyPi ([49b1c47](https://github.com/dbirks/claude-code-proxy/commit/49b1c4709532534bdad7e92d03bd2a71deddb6c7))
+
 ## [0.1.1](https://github.com/dbirks/claude-code-proxy/compare/v0.1.0...v0.1.1) (2025-05-26)
 
 
