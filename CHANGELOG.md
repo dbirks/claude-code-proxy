@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.5](https://github.com/dbirks/claude-code-proxy/compare/v0.1.4...v0.1.5) (2025-05-26)
+
+
+### Bug Fixes
+
+* Fix Bash tool calling ([08efd38](https://github.com/dbirks/claude-code-proxy/commit/08efd38d75aebe7bef410b258c49fa62a40ae4ab))
+
+
+### Miscellaneous Chores
+
+* **deps:** update dependency node to v22 ([#15](https://github.com/dbirks/claude-code-proxy/issues/15)) ([ccf8afd](https://github.com/dbirks/claude-code-proxy/commit/ccf8afd19ad75846b5dee71f05e9d775aba9f212))
+
 ## [0.1.4](https://github.com/dbirks/claude-code-proxy/compare/v0.1.3...v0.1.4) (2025-05-26)
 
 
