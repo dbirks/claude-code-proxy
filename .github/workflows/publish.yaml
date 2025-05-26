@@ -5,12 +5,18 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: read # to clone the repo
+  id-token: write # to auth with PyPI using OIDC
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v5
