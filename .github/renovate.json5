@@ -1,0 +1,12 @@
+{
+  extends: [
+    "config:recommended",
+    ":disableRateLimiting",
+    "group:allNonMajor",
+  ],
+  dependencyDashboardApproval: true,
+  recreateWhen: "never",
+  // schedule: ["after 7am every weekday", "before 5pm every weekday"],
+  timezone: "America/New_York",
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+}
