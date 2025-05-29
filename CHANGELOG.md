@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.6](https://github.com/dbirks/claude-code-proxy/compare/v0.1.5...v0.1.6) (2025-05-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency litellm to v1.71.2 ([#18](https://github.com/dbirks/claude-code-proxy/issues/18)) ([9286ecc](https://github.com/dbirks/claude-code-proxy/commit/9286eccb4934c726bb5d268de116326df471138a))
+* Fix more issues with tool calling ([a45ea71](https://github.com/dbirks/claude-code-proxy/commit/a45ea71a363836a71b308d6d1be003000a937c52))
+
 ## [0.1.5](https://github.com/dbirks/claude-code-proxy/compare/v0.1.4...v0.1.5) (2025-05-26)
 
 
