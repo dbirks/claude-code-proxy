@@ -9,12 +9,12 @@ dependencies = [
     "uvicorn==0.34.2",
     "httpx==0.28.1",
     "pydantic==2.11.5",
-    "litellm==1.71.2",
+    "litellm==1.71.3",
     "python-dotenv==1.1.0",
 ]
 
 [dependency-groups]
-dev = ["ruff==0.11.11"]
+dev = ["ruff==0.11.12"]
 
 [build-system]
 requires = ["uv_build>=0.7.8,<0.8"]
