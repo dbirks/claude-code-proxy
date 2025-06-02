@@ -1359,29 +1359,42 @@ async def create_message(request: MessagesRequest, raw_request: Request):
                     f"Message {i} format check - role: {msg.get('role')}, content type: {type(msg.get('content'))}"
                 )
                 
-            # CRITICAL DEBUG: Print out the full message sequence before sending to OpenAI
-            logger.warning("FULL MESSAGE SEQUENCE BEING SENT TO OPENAI:")
-            for i, msg in enumerate(litellm_request["messages"]):
-                if msg.get("role") == "assistant" and "tool_calls" in msg:
-                    tool_calls = msg["tool_calls"]
-                    tool_call_ids = [tc.get("id") for tc in tool_calls] if isinstance(tool_calls, list) else []
-                    logger.warning(f"  Message {i}: role={msg['role']}, has tool_calls with IDs: {tool_call_ids}")
-                elif msg.get("role") == "tool":
-                    logger.warning(f"  Message {i}: role={msg['role']}, tool_call_id={msg.get('tool_call_id')}, content={msg.get('content')[:50]}...")
-                else:
-                    logger.warning(f"  Message {i}: role={msg['role']}, content_length={len(str(msg.get('content')))}")
+            # Log summary of message sequence (only log first few messages and tool calls to reduce verbosity)
+            if logger.level <= logging.DEBUG:
+                logger.debug("Message sequence summary being sent to OpenAI:")
+                tool_call_count = 0
+                for i, msg in enumerate(litellm_request["messages"]):
+                    if i < 3 or i >= len(litellm_request["messages"]) - 3:  # Only log first/last 3 messages
+                        if msg.get("role") == "assistant" and "tool_calls" in msg:
+                            tool_calls = msg["tool_calls"]
+                            tool_call_ids = [tc.get("id") for tc in tool_calls] if isinstance(tool_calls, list) else []
+                            tool_call_count += len(tool_call_ids)
+                            logger.debug(f"  Message {i}: role={msg['role']}, has tool_calls with IDs: {tool_call_ids}")
+                        elif msg.get("role") == "tool":
+                            logger.debug(f"  Message {i}: role={msg['role']}, tool_call_id={msg.get('tool_call_id')}")
+                        else:
+                            logger.debug(f"  Message {i}: role={msg['role']}, content_length={len(str(msg.get('content')))}")
+                    elif i == 3 and len(litellm_request["messages"]) > 6:
+                        logger.debug(f"  ... {len(litellm_request['messages']) - 6} more messages ...")
+                
+                logger.debug(f"Total messages: {len(litellm_request['messages'])}, total tool calls: {tool_call_count}")
                     
-            # Check for assistant messages with tool_calls not followed by tool responses
-            for i, msg in enumerate(litellm_request["messages"]):
+            # For OpenAI, we need to ensure each tool call is properly matched with a response
+            # Instead of adding dummy responses, we'll remove tool calls that don't have responses
+            i = 0
+            while i < len(litellm_request["messages"]):
+                msg = litellm_request["messages"][i]
                 if msg.get("role") == "assistant" and "tool_calls" in msg:
                     tool_calls = msg["tool_calls"]
                     if not isinstance(tool_calls, list):
                         tool_calls = [tool_calls]
-                        
+                    
+                    # Check which tool calls have responses
+                    valid_tool_calls = []
                     for tc in tool_calls:
                         tc_id = tc.get("id")
                         if tc_id:
-                            # Check if there's a corresponding tool message
+                            # Look for a corresponding tool message
                             found_response = False
                             for j in range(i+1, len(litellm_request["messages"])):
                                 next_msg = litellm_request["messages"][j]
@@ -1391,17 +1404,26 @@ async def create_message(request: MessagesRequest, raw_request: Request):
                                 elif next_msg.get("role") == "assistant":
                                     # If we hit another assistant message, we've gone too far
                                     break
-                                    
-                            if not found_response:
-                                logger.error(f"ERROR: No tool response found for tool_call_id {tc_id} in message {i}")
-                                # Add a dummy tool response as a workaround
-                                dummy_response = {
-                                    "role": "tool",
-                                    "tool_call_id": tc_id,
-                                    "content": "Tool response not available"
-                                }
-                                litellm_request["messages"].insert(i+1, dummy_response)
-                                logger.warning(f"Added dummy tool response for missing tool_call_id {tc_id}")
+                            
+                            if found_response:
+                                valid_tool_calls.append(tc)
+                    
+                    # Update the message with only the valid tool calls
+                    if len(valid_tool_calls) < len(tool_calls):
+                        logger.info(f"Found {len(tool_calls)} tool calls, but only {len(valid_tool_calls)} have matching responses. Cleaning up.")
+                    
+                    if len(valid_tool_calls) == 0:
+                        # If no valid tool calls, remove the tool_calls field entirely
+                        logger.info(f"Removing tool_calls field from message {i} as no valid tool calls found")
+                        del msg["tool_calls"]
+                        # If there's no content, add an empty string
+                        if not msg.get("content"):
+                            msg["content"] = ""
+                    else:
+                        # Keep only the valid tool calls
+                        logger.info(f"Keeping {len(valid_tool_calls)} valid tool calls in message {i}")
+                        msg["tool_calls"] = valid_tool_calls
+                i += 1
                             
 
                 # If content is still a list or None, replace with placeholder
