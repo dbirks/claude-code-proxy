@@ -15,6 +15,7 @@
 - [Installation](#installation)
   - [Prerequisites](#prerequisites)
   - [Configuration](#configuration)
+  - [Custom API Endpoints 🔗](#custom-api-endpoints-)
   - [Using with Claude Code 🎮](#using-with-claude-code-)
 - [Model Mapping 🗺️](#model-mapping-️)
   - [Supported Models](#supported-models)
@@ -56,6 +57,9 @@ uvx claude-code-proxy
    *   `ANTHROPIC_API_KEY`: (Optional) Needed only if proxying *to* Anthropic models.
    *   `OPENAI_API_KEY`: Your OpenAI API key (Required if using the default OpenAI preference or as fallback).
    *   `GEMINI_API_KEY`: Your Google AI Studio (Gemini) API key (Required if PREFERRED_PROVIDER=google).
+   *   `OPENAI_API_BASE` (Optional): Custom OpenAI-compatible endpoint URL (e.g., `http://localhost:8989/v1`).
+   *   `ANTHROPIC_API_BASE` (Optional): Custom Anthropic-compatible endpoint URL.
+   *   `GEMINI_API_BASE` (Optional): Custom Gemini-compatible endpoint URL.
    *   `PREFERRED_PROVIDER` (Optional): Set to `openai` (default) or `google`. This determines the primary backend for mapping `haiku`/`sonnet`.
    *   `BIG_MODEL` (Optional): The model to map `sonnet` requests to. Defaults to `gpt-4.1` (if `PREFERRED_PROVIDER=openai`) or `gemini-2.5-pro-preview-03-25`.
    *   `SMALL_MODEL` (Optional): The model to map `haiku` requests to. Defaults to `gpt-4.1-mini` (if `PREFERRED_PROVIDER=openai`) or `gemini-2.0-flash`.
@@ -69,6 +73,40 @@ uvx claude-code-proxy
    uv run uvicorn server:app --host 0.0.0.0 --port 8082 --reload
    ```
    *(`--reload` is optional, for development)*
+
+### Custom API Endpoints 🔗
+
+The proxy supports custom OpenAI-compatible endpoints, allowing you to route requests to local AI servers, custom proxies, or alternative providers that implement the OpenAI API format.
+
+**Environment Variables:**
+- `OPENAI_API_BASE`: Custom OpenAI-compatible endpoint
+- `ANTHROPIC_API_BASE`: Custom Anthropic-compatible endpoint
+- `GEMINI_API_BASE`: Custom Gemini-compatible endpoint
+
+**Use Cases:**
+- **Local AI servers**: Ollama, LM Studio, text-generation-webui
+- **Self-hosted models**: vLLM, TGI (Text Generation Inference)
+- **Custom proxies**: Load balancers, rate limiters, custom authentication
+- **Alternative providers**: Azure OpenAI, OpenRouter, etc.
+
+**Examples:**
+
+*Local Ollama server:*
+```bash
+OPENAI_API_BASE="http://localhost:11434/v1"
+```
+
+*Azure OpenAI:*
+```bash
+OPENAI_API_BASE="https://your-resource.openai.azure.com"
+```
+
+*Custom proxy server:*
+```bash
+OPENAI_API_BASE="http://localhost:8989/v1"
+```
+
+When a custom endpoint is specified, all requests for that provider will be routed to your custom URL instead of the default provider endpoints.
 
 ### Using with Claude Code 🎮
 
@@ -156,6 +194,15 @@ GEMINI_API_KEY="your-google-key"
 PREFERRED_PROVIDER="openai"
 BIG_MODEL="gpt-4o" # Example specific model
 SMALL_MODEL="gpt-4o-mini" # Example specific model
+```
+
+**Example 4: Use Custom Endpoints (Local AI Server)**
+```dotenv
+OPENAI_API_KEY="not-needed-for-local" # Some local servers still require a dummy key
+OPENAI_API_BASE="http://localhost:11434/v1" # Local Ollama server
+PREFERRED_PROVIDER="openai"
+BIG_MODEL="llama2" # Local model name
+SMALL_MODEL="codellama" # Local model name
 ```
 
 ## How It Works 🧩

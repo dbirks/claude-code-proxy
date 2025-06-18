@@ -82,6 +82,11 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
+# Get custom API endpoints from environment
+OPENAI_API_BASE = os.environ.get("OPENAI_API_BASE")  # Custom OpenAI-compatible endpoint
+ANTHROPIC_API_BASE = os.environ.get("ANTHROPIC_API_BASE")  # Custom Anthropic-compatible endpoint
+GEMINI_API_BASE = os.environ.get("GEMINI_API_BASE")  # Custom Gemini-compatible endpoint
+
 # Get preferred provider (default to openai)
 PREFERRED_PROVIDER = os.environ.get("PREFERRED_PROVIDER", "openai").lower()
 
@@ -1378,11 +1383,22 @@ async def count_tokens(request: TokenCountRequest, raw_request: Request):
                 200,  # Assuming success at this point
             )
 
+            # Add custom endpoint support for token counting
+            token_counter_args = {
+                "model": converted_request["model"],
+                "messages": converted_request["messages"],
+            }
+
+            # Add custom API base if specified
+            if request.model.startswith("openai/") and OPENAI_API_BASE:
+                token_counter_args["api_base"] = OPENAI_API_BASE
+            elif request.model.startswith("gemini/") and GEMINI_API_BASE:
+                token_counter_args["api_base"] = GEMINI_API_BASE
+            elif not request.model.startswith(("openai/", "gemini/")) and ANTHROPIC_API_BASE:
+                token_counter_args["api_base"] = ANTHROPIC_API_BASE
+
             # Count tokens
-            token_count = token_counter(
-                model=converted_request["model"],
-                messages=converted_request["messages"],
-            )
+            token_count = token_counter(**token_counter_args)
 
             # Return Anthropic-style response
             return TokenCountResponse(input_tokens=token_count)
